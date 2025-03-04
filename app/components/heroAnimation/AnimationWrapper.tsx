@@ -557,7 +557,7 @@ const SequenceFeatureCarousel = ({ data }: { data: SequenceDataProps }) => {
             background: data.colors.bgColor,
           }}
         >
-          <div className="size-4 border border-gray-300 grid place-items-center">
+          <div className="size-4 grid place-items-center">
             {data.colors.icon()}
           </div>
         </div>
