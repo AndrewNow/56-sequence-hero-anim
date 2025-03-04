@@ -331,7 +331,7 @@ const TopLeftChip = ({ data }: { data: SequenceDataProps }) => {
       {/* bg gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(87.49%_53.42%_at_50%_50%,rgba(74,97,220,0.30)_0%,rgba(74,97,220,0.00)_100%)]"></div>
       {/* text box */}
-      <div className="absolute bottom-[-50%] left-1/2 -translate-x-1/2">
+      <div className="absolute bottom-[-55%] left-1/2 -translate-x-1/2">
         <SequenceFeatureTextCarousel data={data} />
       </div>
     </div>
@@ -385,7 +385,7 @@ const BottomLeftChip = ({ data }: { data: SequenceDataProps }) => {
       {/* bg gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(87.49%_53.42%_at_50%_50%,rgba(123,199,173,0.30)_0%,rgba(123,199,173,0.00)_100%)]"></div>
       {/* text box */}
-      <div className="absolute bottom-[-50%] left-1/2 -translate-x-1/2">
+      <div className="absolute bottom-[-55%] left-1/2 -translate-x-1/2">
         <SequenceFeatureTextCarousel data={data} />
       </div>
     </div>
@@ -439,7 +439,7 @@ const MiddleChip = ({ data }: { data: SequenceDataProps }) => {
       {/* bg gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(87.49%_53.42%_at_50%_50%,rgba(74,97,220,0.30)_0%,rgba(74,97,220,0.00)_100%)]"></div>
       {/* text box */}
-      <div className="absolute bottom-[-50%] left-1/2 -translate-x-1/2">
+      <div className="absolute bottom-[-41%] left-1/2 -translate-x-1/2">
         <SequenceFeatureTextCarousel data={data} />
       </div>
     </div>
@@ -584,13 +584,13 @@ const AnimationWrapper = () => {
   // NOTE: icons should be slightly larger (these are ~13-14px, should be ~14-16px)
   const colors = {
     power: {
-      borderColor: "#1B2E9480",
+      borderColor: "#1b2d94b2",
       bgColor: "#1B2E94",
       gradientColor: "linear-gradient(145deg, #667DF6 12.71%, #2C44C1 80.61%)",
       icon: WalletIcon,
     },
     onboard: {
-      borderColor: "#3C179680",
+      borderColor: "#3b1796c8",
       bgColor: "#3C1796",
       gradientColor: "linear-gradient(145deg, #9C6EFF 12.71%, #6635FF 80.61%)",
       icon: TransactionIcon,
@@ -602,7 +602,7 @@ const AnimationWrapper = () => {
       icon: CollectionIcon,
     },
     monetize: {
-      borderColor: "20473A80",
+      borderColor: "#20473ab5",
       bgColor: "#20473A",
       gradientColor: "linear-gradient(145deg, #7BC7AD 12.71%, #3C6154 80.61%)",
       icon: WalletIcon,
