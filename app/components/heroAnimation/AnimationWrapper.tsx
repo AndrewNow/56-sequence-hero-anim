@@ -363,6 +363,7 @@ const TopLeftChip = ({
         </AnimatePresence>
       </div>
       {/* text box */}
+      {/* NOTE: these text elements are positioned absolutely for each "Chip" because their width can vary, so block positioning would cause the chip to translate when the text changes */}
       <div className="absolute bottom-[-55%] left-1/2 -translate-x-1/2">
         <SequenceFeatureTextCarousel data={data} cellIsActive={cellIsActive} />
       </div>
@@ -583,11 +584,11 @@ const BottomLeftCircuitLines = ({
     },
   };
 
-    const transitions = {
-      delay: isActive ? 0.25 : 0,
-      repeat: isActive ? Infinity : 0,
-      ease: "easeInOut",
-    };
+  const transitions = {
+    delay: isActive ? 0.25 : 0,
+    repeat: isActive ? Infinity : 0,
+    ease: "easeInOut",
+  };
 
   return (
     <svg width="74" height="94" viewBox="0 0 74 94" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1148,6 +1149,54 @@ const useSequenceClock = (initialDelay: number, dataArray: SequenceDataProps[]) 
   };
 };
 
+const CapacitorDecorator = () => {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="bg-white-15 rounded-full h-[3px] w-[7px]"></div>
+      <div className="flex items-center">
+        <div className="bg-white-15 w-[2px] h-[3px]"></div>
+        <div className="bg-white-10 size-[5px]"></div>
+        <div className="bg-white-15 w-[2px] h-[3px]"></div>
+      </div>
+      <div className="bg-white-15 rounded-full h-[3px] w-[7px]"></div>
+    </div>
+  );
+};
+
+const Decorators = () => {
+  return (
+    <div className="z-0 absolute top-0 left-0 w-full h-full">
+      <div className="absolute top-1/2 left-[10%] flex gap-1">
+        <CapacitorDecorator />
+        <CapacitorDecorator />
+        <CapacitorDecorator />
+        <CapacitorDecorator />
+      </div>
+      <div className="absolute top-1/3 right-[15%] flex gap-1">
+        <CapacitorDecorator />
+        <CapacitorDecorator />
+        <CapacitorDecorator />
+        <CapacitorDecorator />
+      </div>
+      <div className="absolute top-[15%] right-[27.5%] flex gap-1">
+        <CapacitorDecorator />
+        <CapacitorDecorator />
+      </div>
+      <div className="absolute top-[5%] left-[27.5%] flex gap-1">
+        <CapacitorDecorator />
+      </div>
+      <div className="absolute bottom-[20%] right-[30%] flex gap-1">
+        <CapacitorDecorator />
+      </div>
+      <div className="absolute bottom-[20%] left-[50%] flex gap-1">
+        <div className="border border-white-10 p-1 bg-black">
+          <div className="bg-white-5 h-[20px] w-[36px] border border-white-10"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AnimationWrapper = () => {
   // TODO: replace icon from this array and place it into sequenceData instead
   // I only did this to cut corners
@@ -1307,6 +1356,7 @@ const AnimationWrapper = () => {
           />
         </div>
       </div>
+      <Decorators />
     </div>
   );
 };
