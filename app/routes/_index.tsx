@@ -13,7 +13,7 @@ export default function Index() {
             experiences.
           </p>
         </div>
-        <div className="relative border border-white-10 bg-black flex-1 mx-auto min-h-[516px] w-full max-w-[516px]">
+        <div className="relative border border-dashed border-white-25 bg-black flex-1 mx-auto min-h-[516px] w-full max-w-[516px]">
           <AnimationWrapper />
         </div>
       </div>

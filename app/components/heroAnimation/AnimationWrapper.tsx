@@ -283,14 +283,12 @@ const MainChipSequence = () => {
         {/* center */}
         <div className="flex flex-col gap-0.5 md:gap-1 justify-between items-center">
           <div className="flex flex-row gap-[6px]">
-            {" "}
             {Array.from({ length: 12 }).map((_, i) => (
               <div key={i} className="w-0.5 h-2 bg-white-10 rounded-px"></div>
             ))}
           </div>
           <SequenceLogoSVG />
           <div className="flex flex-row gap-[6px]">
-            {" "}
             {Array.from({ length: 12 }).map((_, i) => (
               <div key={i} className="w-0.5 h-2 bg-white-10 rounded-px"></div>
             ))}
@@ -954,7 +952,7 @@ const SequenceFeatureCarousel = ({
       off: "#18181890",
     },
     gradientColor: {
-      on: [data.colors.gradientColor, "#181818", data.colors.gradientColor],
+      on: [data.colors.gradientColor, "#181818", data.colors.gradientColor], // subtle flicker
       off: "#181818",
     },
     bgColor: {
@@ -962,7 +960,7 @@ const SequenceFeatureCarousel = ({
       off: "#000000",
     },
     opacity: {
-      on: [1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+      on: [1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1], // strong flicker
       off: 0,
     },
   };
