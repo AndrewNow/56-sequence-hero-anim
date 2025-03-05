@@ -1,4 +1,7 @@
+import { useState, useEffect } from "react";
+// import { animate, timeline } from "motion";
 import { WalletIcon, TransactionIcon, CollectionIcon } from "./icons";
+import { motion } from "motion/react";
 
 interface SequenceDataProps {
   title: string;
@@ -8,6 +11,7 @@ interface SequenceDataProps {
     borderColor: string;
     bgColor: string;
     gradientColor: string;
+    cellBgGradient: string;
   };
 }
 
@@ -307,32 +311,55 @@ const MainChipSequence = () => {
   );
 };
 
-const TopLeftChip = ({ data }: { data: SequenceDataProps }) => {
+const TopLeftChip = ({
+  data,
+  cellIsActive,
+}: {
+  data: SequenceDataProps;
+  cellIsActive: boolean;
+}) => {
   return (
-    <div className="z-50 inline-flex relative flex-row gap-2 border-2 border-white-5 rounded-lg p-2 bg-white-5 backdrop-blur-sm">
-      {/* left */}
-      <div className="flex flex-col gap-2">
-        <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
-        {Array.from({ length: 2 }).map((_, i) => (
-          <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
-        ))}
-        <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
+    <div className="z-50 relative">
+      <div className="inline-flex relative flex-row gap-2 border-2 border-white-5 rounded-lg p-2 bg-white-5 backdrop-blur-sm overflow-hidden">
+        {/* left */}
+        <div className="relative z-10 flex flex-col gap-2">
+          <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
+          ))}
+          <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
+        </div>
+        {/* center */}
+        <SequenceFeatureCarousel data={data} cellIsActive={cellIsActive} />
+        {/* right */}
+        <div className="relative z-10 flex flex-col gap-2">
+          <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
+          ))}
+          <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
+        </div>
+        {/* bg gradient */}
+        <motion.div
+          initial={{
+            background: "#00000090",
+          }}
+          animate={{
+            background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
+          }}
+          transition={{
+            duration: 1,
+            delay: 0.25,
+          }}
+          className="z-0 absolute inset-0 backdrop-blur-sm"
+          style={{
+            background: data.colors.cellBgGradient,
+          }}
+        ></motion.div>
       </div>
-      {/* center */}
-      <SequenceFeatureCarousel data={data} />
-      {/* right */}
-      <div className="flex flex-col gap-2">
-        <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
-        {Array.from({ length: 2 }).map((_, i) => (
-          <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
-        ))}
-        <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
-      </div>
-      {/* bg gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(87.49%_53.42%_at_50%_50%,rgba(74,97,220,0.30)_0%,rgba(74,97,220,0.00)_100%)]"></div>
       {/* text box */}
       <div className="absolute bottom-[-55%] left-1/2 -translate-x-1/2">
-        <SequenceFeatureTextCarousel data={data} />
+        <SequenceFeatureTextCarousel data={data} cellIsActive={cellIsActive} />
       </div>
     </div>
   );
@@ -365,28 +392,51 @@ const TopLeftCircuitLines = () => {
   );
 };
 
-const BottomLeftChip = ({ data }: { data: SequenceDataProps }) => {
+const BottomLeftChip = ({
+  data,
+  cellIsActive,
+}: {
+  data: SequenceDataProps;
+  cellIsActive: boolean;
+}) => {
   return (
-    <div className="z-50 inline-flex relative flex-row gap-2 border-2 border-white-5 rounded-lg p-2 bg-white-5 backdrop-blur-sm">
-      {/* left */}
-      <div className="flex flex-col justify-between">
-        <div className="size-[3px] bg-white-15 rounded-full"></div>
-        <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
-        <div className="size-[3px] bg-white-15 rounded-full"></div>
+    <div className="z-50 relative">
+      <div className="inline-flex relative flex-row gap-2 border-2 border-white-5 rounded-lg p-2 bg-white-5 backdrop-blur-sm overflow-hidden">
+        {/* left */}
+        <div className="relative z-10 flex flex-col justify-between">
+          <div className="size-[3px] bg-white-15 rounded-full"></div>
+          <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
+          <div className="size-[3px] bg-white-15 rounded-full"></div>
+        </div>
+        {/* center */}
+        <SequenceFeatureCarousel data={data} cellIsActive={cellIsActive} />
+        {/* right */}
+        <div className="relative z-10 flex flex-col justify-between">
+          <div className="size-[3px] bg-white-15 rounded-full"></div>
+          <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
+          <div className="size-[3px] bg-white-15 rounded-full"></div>
+        </div>
+        {/* bg gradient */}
+        <motion.div
+          initial={{
+            background: "#00000090",
+          }}
+          animate={{
+            background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
+          }}
+          transition={{
+            duration: 1,
+            delay: 0.25,
+          }}
+          className="z-0 absolute inset-0 backdrop-blur-sm"
+          style={{
+            background: "#00000090",
+          }}
+        ></motion.div>
       </div>
-      {/* center */}
-      <SequenceFeatureCarousel data={data} />
-      {/* right */}
-      <div className="flex flex-col justify-between">
-        <div className="size-[3px] bg-white-15 rounded-full"></div>
-        <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
-        <div className="size-[3px] bg-white-15 rounded-full"></div>
-      </div>
-      {/* bg gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(87.49%_53.42%_at_50%_50%,rgba(123,199,173,0.30)_0%,rgba(123,199,173,0.00)_100%)]"></div>
       {/* text box */}
-      <div className="absolute bottom-[-55%] left-1/2 -translate-x-1/2">
-        <SequenceFeatureTextCarousel data={data} />
+      <div className="absolute bottom-[-50%] left-1/2 -translate-x-1/2">
+        <SequenceFeatureTextCarousel data={data} cellIsActive={cellIsActive} />
       </div>
     </div>
   );
@@ -419,28 +469,45 @@ const BottomLeftCircuitLines = () => {
   );
 };
 
-const MiddleChip = ({ data }: { data: SequenceDataProps }) => {
+const MiddleChip = ({ data, cellIsActive }: { data: SequenceDataProps; cellIsActive: boolean }) => {
   return (
-    <div className="z-50 inline-flex relative flex-col gap-1.5 border-2 border-white-5 rounded-lg p-2 bg-white-5 backdrop-blur-sm">
-      {/* top */}
-      <div className="flex flex-row justify-between">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
-        ))}
+    <div className="z-50 relative">
+      <div className="inline-flex relative flex-col gap-1.5 border-2 border-white-5 rounded-lg p-2 bg-white-5 backdrop-blur-sm overflow-hidden">
+        {/* top */}
+        <div className="relative z-10 flex flex-row justify-between">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
+          ))}
+        </div>
+        {/* center */}
+        <SequenceFeatureCarousel data={data} cellIsActive={cellIsActive} />
+        {/* bottom */}
+        <div className="relative z-10 flex flex-row justify-between">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
+          ))}
+        </div>
+        {/* bg gradient */}
+        <motion.div
+          initial={{
+            background: "#00000090",
+          }}
+          animate={{
+            background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
+          }}
+          transition={{
+            duration: 1,
+            delay: 0.25,
+          }}
+          className="z-0 absolute inset-0 backdrop-blur-sm"
+          style={{
+            background: data.colors.cellBgGradient,
+          }}
+        ></motion.div>
       </div>
-      {/* center */}
-      <SequenceFeatureCarousel data={data} />
-      {/* bottom */}
-      <div className="flex flex-row justify-between">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="size-[3px] bg-white-15 rounded-full"></div>
-        ))}
-      </div>
-      {/* bg gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(87.49%_53.42%_at_50%_50%,rgba(74,97,220,0.30)_0%,rgba(74,97,220,0.00)_100%)]"></div>
       {/* text box */}
       <div className="absolute bottom-[-41%] left-1/2 -translate-x-1/2">
-        <SequenceFeatureTextCarousel data={data} />
+        <SequenceFeatureTextCarousel data={data} cellIsActive={cellIsActive} />
       </div>
     </div>
   );
@@ -537,45 +604,201 @@ const MiddleCircuitLines = () => {
   );
 };
 
-const SequenceFeatureCarousel = ({ data }: { data: SequenceDataProps }) => {
+const SequenceFeatureCarousel = ({
+  data,
+  cellIsActive,
+}: {
+  data: SequenceDataProps;
+  cellIsActive: boolean;
+}) => {
+  const color = {
+    borderColor: {
+      on: data.colors.borderColor,
+      off: "#18181890",
+    },
+    gradientColor: {
+      on: data.colors.gradientColor,
+      off: "#181818",
+    },
+    bgColor: {
+      on: data.colors.bgColor,
+      off: "#000000",
+    },
+    opacity: {
+      on: 1,
+      off: 0,
+    },
+  };
+
+  // TODO: make this flicker effect more natural
+  const transition = {
+    duration: 0.5,
+    // type: "spring",
+    // stiffness: 800, // Increased stiffness for more tension
+    // damping: 5, // Reduced damping for less resistance
+    // mass: 0.8, // Reduced mass for faster movement
+    // bounce: 1.2, // Increased bounce for more springiness
+    // velocity: 2, // Increased initial velocity
+  };
+
   return (
-    <div
-      className="rounded-[11px] p-[4px] bg-black"
+    <motion.div
+      className="relative z-10 rounded-[11px] p-[4px] bg-black"
+      initial={{
+        borderColor: color.borderColor.off,
+      }}
+      animate={{
+        borderColor: cellIsActive ? color.borderColor.on : color.borderColor.off,
+      }}
+      transition={transition}
       style={{
-        border: `2px solid ${data.colors.borderColor}`,
+        border: `2px solid ${color.borderColor.off}`,
       }}
     >
-      <div
-        className="size-10 p-[2px] bg-white-10 rounded-[6px]"
+      <motion.div
+        initial={{
+          background: color.gradientColor.off,
+        }}
+        animate={{
+          background: cellIsActive ? color.gradientColor.on : color.gradientColor.off,
+        }}
+        transition={transition}
+        className="size-10 p-[2px] rounded-[6px]"
         style={{
-          background: data.colors.gradientColor,
+          background: color.gradientColor.off,
         }}
       >
-        <div
+        <motion.div
+          initial={{
+            background: color.bgColor.off,
+          }}
+          animate={{
+            background: cellIsActive ? color.bgColor.on : color.bgColor.off,
+          }}
+          transition={transition}
           className="grid place-items-center size-full bg-black rounded-[5px]"
           style={{
-            background: data.colors.bgColor,
+            background: cellIsActive ? color.bgColor.on : color.bgColor.off,
           }}
         >
-          <div className="size-4 grid place-items-center">
+          <motion.div
+            initial={{
+              opacity: color.opacity.off,
+            }}
+            animate={{
+              opacity: cellIsActive ? color.opacity.on : color.opacity.off,
+            }}
+            transition={transition}
+            className="size-4 grid place-items-center"
+          >
             {data.colors.icon()}
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const SequenceFeatureTextCarousel = ({
+  data,
+  cellIsActive,
+}: {
+  data: SequenceDataProps;
+  cellIsActive: boolean;
+}) => {
+  const animationStyles = {
+    borderColor: {
+      on: "#303030",
+      off: "#060606",
+    },
+    bgColor: {
+      on: "#0C0C0C",
+      off: "#000000",
+    },
+    opacity: {
+      on: 1,
+      off: 0,
+    },
+  };
+
+  const transition = {
+    duration: 0.25,
+  };
+
+  return (
+    <div className="inline mx-auto relative z-20">
+      <motion.div
+        initial={{
+          opacity: animationStyles.opacity.off,
+          border: `2px solid ${animationStyles.borderColor.off}`,
+          background: animationStyles.bgColor.off,
+        }}
+        animate={{
+          opacity: cellIsActive ? animationStyles.opacity.on : animationStyles.opacity.off,
+          border: cellIsActive
+            ? `2px solid ${animationStyles.borderColor.on}`
+            : `2px solid ${animationStyles.borderColor.off}`,
+          background: cellIsActive ? animationStyles.bgColor.on : animationStyles.bgColor.off,
+        }}
+        transition={transition}
+        className="rounded-[4px] px-2 py-[3px] inline-grid place-items-center"
+      >
+        <span className="text-white-50 text-[10px] md:text-xs font-medium whitespace-nowrap">
+          {data.title}
+        </span>
+      </motion.div>
     </div>
   );
 };
 
-const SequenceFeatureTextCarousel = ({ data }: { data: SequenceDataProps }) => {
-  return (
-    <div className="inline mx-auto">
-      <div className="border border-white-15 rounded-[4px] px-2 py-[3px] bg-white-5 inline-grid place-items-center">
-        <span className="text-white-50 text-[10px] md:text-xs font-medium whitespace-nowrap">
-          {data.title}
-        </span>
-      </div>
-    </div>
-  );
+// Custom hook for managing independent clocks and cycling through data
+const useSequenceClock = (initialDelay: number, dataArray: SequenceDataProps[]) => {
+  const [cellIsActive, setCellIsActive] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    // Initial timeout to start the clock with a random delay
+    const initialTimeoutId = setTimeout(() => {
+      let isActive = false; // Start with inactive state
+      let index = 0;
+      let timeoutId: NodeJS.Timeout; // Declare timeoutId variable
+
+      const toggleClock = () => {
+        // Toggle between active and inactive states
+        isActive = !isActive;
+        setCellIsActive(isActive);
+
+        // When becoming inactive, increment the index
+        if (!isActive) {
+          // Increment index and loop back to 0 if needed
+          index = (index + 1) % dataArray.length;
+          setCurrentIndex(index);
+        }
+
+        // Schedule next toggle based on current state
+        const nextDelay = isActive ? 4000 : 2500; // Active duration | Inactive duration
+        timeoutId = setTimeout(toggleClock, nextDelay);
+      };
+
+      // Start the first toggle
+      toggleClock();
+
+      // Cleanup function
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }, initialDelay);
+
+    // Cleanup initial timeout
+    return () => clearTimeout(initialTimeoutId);
+  }, [dataArray.length, initialDelay]); // Added initialDelay as dependency
+
+  // Return both the active state and the current data item
+  return {
+    isActive: cellIsActive,
+    currentData: dataArray[currentIndex],
+    currentIndex,
+  };
 };
 
 const AnimationWrapper = () => {
@@ -588,24 +811,32 @@ const AnimationWrapper = () => {
       bgColor: "#1B2E94",
       gradientColor: "linear-gradient(145deg, #667DF6 12.71%, #2C44C1 80.61%)",
       icon: WalletIcon,
+      cellBgGradient:
+        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(74, 97, 220, 0.30) 0%, rgba(74, 97, 220, 0.00) 100%)",
     },
     onboard: {
-      borderColor: "#3b1796c8",
+      borderColor: "#3b1796dc",
       bgColor: "#3C1796",
       gradientColor: "linear-gradient(145deg, #9C6EFF 12.71%, #6635FF 80.61%)",
       icon: TransactionIcon,
+      cellBgGradient:
+        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(149, 106, 253, 0.30) 0%, rgba(141, 94, 255, 0.00) 100%)",
     },
     analytics: {
-      borderColor: "#0B597B80",
+      borderColor: "#1e6381bd",
       bgColor: "#0B597B",
       gradientColor: "linear-gradient(145deg, #31C7F0 12.71%, #1179A6 80.61%)",
       icon: CollectionIcon,
+      cellBgGradient:
+        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(36, 144, 190, 0.50) 0%, rgba(36, 144, 190, 0.00) 100%)",
     },
     monetize: {
-      borderColor: "#20473ab5",
+      borderColor: "#215846b5",
       bgColor: "#20473A",
       gradientColor: "linear-gradient(145deg, #7BC7AD 12.71%, #3C6154 80.61%)",
       icon: WalletIcon,
+      cellBgGradient:
+        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(123, 199, 173, 0.30) 0%, rgba(123, 199, 173, 0.00) 100%)",
     },
   };
 
@@ -681,13 +912,18 @@ const AnimationWrapper = () => {
   const sequenceData2 = sequenceData.slice(4, 8); // Next 4 items
   const sequenceData3 = sequenceData.slice(8); // Remaining items
 
+  // Use the enhanced hook
+  const clock1 = useSequenceClock(2000, sequenceData1);
+  const clock2 = useSequenceClock(2500, sequenceData2);
+  const clock3 = useSequenceClock(3000, sequenceData3);
+
   return (
     <div className="size-full">
       <MainChipSequence />
       {/* top left */}
       <div className="inline-flex absolute top-[16%] md:top-[18%] left-[5%] md:left-[13%]">
         <div className="flex flex-col gap-2 items-center">
-          <TopLeftChip data={sequenceData1[0]} />
+          <TopLeftChip data={clock1.currentData} cellIsActive={clock1.isActive} />
         </div>
         <div className="z-0 absolute top-[38%] -right-20">
           <TopLeftCircuitLines />
@@ -696,7 +932,7 @@ const AnimationWrapper = () => {
       {/* middle */}
       <div className="inline-flex absolute top-[41%] left-[75%]">
         <div className="flex flex-col gap-2 items-center">
-          <MiddleChip data={sequenceData2[2]} />
+          <MiddleChip data={clock2.currentData} cellIsActive={clock2.isActive} />
         </div>
         <div className="z-0 absolute top-[10%] left-[-100%]">
           <MiddleCircuitLines />
@@ -705,7 +941,7 @@ const AnimationWrapper = () => {
       {/* bottom left */}
       <div className="inline-flex absolute bottom-[20%] left-[16%]">
         <div className="flex flex-col gap-2 items-center">
-          <BottomLeftChip data={sequenceData3[2]} />
+          <BottomLeftChip data={clock3.currentData} cellIsActive={clock3.isActive} />
         </div>
         <div className="z-0 absolute top-[-100%] -right-4">
           <BottomLeftCircuitLines />
