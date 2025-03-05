@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // import { animate, timeline } from "motion";
 import { WalletIcon, TransactionIcon, CollectionIcon } from "./icons";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface SequenceDataProps {
   title: string;
@@ -12,6 +12,7 @@ interface SequenceDataProps {
     bgColor: string;
     gradientColor: string;
     cellBgGradient: string;
+    circuitLineColor: string;
   };
 }
 
@@ -340,22 +341,27 @@ const TopLeftChip = ({
           <div className="w-[3px] h-[10px] bg-white-10 rounded-full"></div>
         </div>
         {/* bg gradient */}
-        <motion.div
-          initial={{
-            background: "#00000090",
-          }}
-          animate={{
-            background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
-          }}
-          transition={{
-            duration: 1,
-            delay: 0.25,
-          }}
-          className="z-0 absolute inset-0 backdrop-blur-sm"
-          style={{
-            background: data.colors.cellBgGradient,
-          }}
-        ></motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cellIsActive ? "active" : "inactive"}
+            initial={{
+              background: "#00000090",
+              opacity: 0,
+            }}
+            animate={{
+              background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.5,
+              delay: 0.15,
+            }}
+            className="z-0 absolute inset-0 backdrop-blur-sm"
+          ></motion.div>
+        </AnimatePresence>
       </div>
       {/* text box */}
       <div className="absolute bottom-[-55%] left-1/2 -translate-x-1/2">
@@ -365,27 +371,109 @@ const TopLeftChip = ({
   );
 };
 
-const TopLeftCircuitLines = () => {
+const TopLeftCircuitLines = ({
+  isActive,
+  circuitLineColor,
+}: {
+  isActive: boolean;
+  circuitLineColor: string;
+}) => {
+  const styles = {
+    opacity: {
+      off: 0.5,
+      on: [0.5, 1, 0.5],
+    },
+    stroke1: {
+      off: "#ffffff30",
+      on: "url(#paint0_linear_520_8464)",
+    },
+    stroke2: {
+      off: "#ffffff30",
+      on: "url(#paint1_linear_520_8464)",
+    },
+    stroke3: {
+      off: "#ffffff30",
+      on: "url(#paint2_linear_520_8464)",
+    },
+  };
+
   return (
     <svg width="94" height="73" viewBox="0 0 94 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M89.1081 36.8932C90.7959 38.581 91.7441 40.8702 91.7441 43.2571V72.4033H93.7441V43.2571C93.7441 40.3398 92.5852 37.5419 90.5223 35.479L58.2652 3.22183C56.2023 1.15893 53.4044 4.05398e-06 50.487 4.05398e-06L0 0V2L50.487 2C52.874 2 55.1631 2.94821 56.851 4.63604L89.1081 36.8932ZM84.4258 46.7921C84.4258 44.4052 83.4776 42.116 81.7897 40.4282L52.9976 11.636C51.3098 9.94821 49.0206 9 46.6336 9L0 9V7L46.6336 7C49.551 7 52.3489 8.15893 54.4118 10.2218L83.2039 39.014C85.2669 41.0769 86.4258 43.8748 86.4258 46.7921V72.5254H84.4258V46.7921ZM77.5 50.0464C77.5 47.6595 76.5518 45.3703 74.864 43.6825L49.2218 18.0403C47.534 16.3525 45.2448 15.4043 42.8579 15.4043L0 15.4043V13.4043L42.8579 13.4043C45.7752 13.4043 48.5731 14.5632 50.636 16.6261L76.2782 42.2683C78.3411 44.3312 79.5 47.1291 79.5 50.0464V72.4043H77.5V50.0464Z"
-        fill="url(#paint0_linear_508_3700)"
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke1.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke1.on : styles.stroke1.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 3 : 0.15,
+          ease: "easeInOut",
+        }}
+        d="M0 14.4043L42.8579 14.4043C45.51 14.4043 48.0536 15.4579 49.9289 17.3332L75.5711 42.9754C77.4464 44.8507 78.5 47.3943 78.5 50.0464L78.5 72.4043"
+        strokeWidth="2"
+      />
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke2.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke2.on : styles.stroke2.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 2.5 : 0.15,
+          ease: "easeInOut",
+        }}
+        d="M0 8L46.6336 8C49.2858 8 51.8293 9.05357 53.7047 10.9289L82.4968 39.7211C84.3722 41.5964 85.4258 44.14 85.4258 46.7921L85.4258 72.5254"
+        strokeWidth="2"
+      />
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke3.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke3.on : styles.stroke3.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 1.5 : 0.15,
+          ease: "easeInOut",
+        }}
+        d="M0 0.999996L50.487 0.999998C53.1392 0.999998 55.6827 2.05357 57.5581 3.92893L89.8152 36.1861C91.6906 38.0614 92.7441 40.605 92.7441 43.2571L92.7441 72.4033"
+        strokeWidth="2"
       />
       <defs>
         <linearGradient
-          id="paint0_linear_508_3700"
-          x1="46.3721"
-          y1="0.999998"
-          x2="46.3721"
-          y2="72.4033"
+          id="paint0_linear_520_8464"
+          x1="69.5"
+          y1="63.5"
+          x2="25"
+          y2="14"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#2B3881" />
-          <stop offset="0.667213" stopColor="#181818" />
-          <stop offset="1" stopColor="#1E308F" />
+          <stop stopColor={circuitLineColor} />
+          <stop offset="1" stopColor="#21113e" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_520_8464"
+          x1="29"
+          y1="10.5"
+          x2="85"
+          y2="63.5"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.29326" stopColor={circuitLineColor} />
+          <stop offset="1" stopColor="#21113e" />
+        </linearGradient>
+        <linearGradient
+          id="paint2_linear_520_8464"
+          x1="69.5"
+          y1="63.5"
+          x2="25"
+          y2="14"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor={circuitLineColor} />
+          <stop offset="1" stopColor="#21113e" />
         </linearGradient>
       </defs>
     </svg>
@@ -417,22 +505,27 @@ const BottomLeftChip = ({
           <div className="size-[3px] bg-white-15 rounded-full"></div>
         </div>
         {/* bg gradient */}
-        <motion.div
-          initial={{
-            background: "#00000090",
-          }}
-          animate={{
-            background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
-          }}
-          transition={{
-            duration: 1,
-            delay: 0.25,
-          }}
-          className="z-0 absolute inset-0 backdrop-blur-sm"
-          style={{
-            background: "#00000090",
-          }}
-        ></motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cellIsActive ? "active" : "inactive"}
+            initial={{
+              background: "#00000090",
+              opacity: 0,
+            }}
+            animate={{
+              background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.5,
+              delay: 0.15,
+            }}
+            className="z-0 absolute inset-0 backdrop-blur-sm"
+          ></motion.div>
+        </AnimatePresence>
       </div>
       {/* text box */}
       <div className="absolute bottom-[-50%] left-1/2 -translate-x-1/2">
@@ -442,14 +535,85 @@ const BottomLeftChip = ({
   );
 };
 
-const BottomLeftCircuitLines = () => {
+const BottomLeftCircuitLines = ({
+  isActive,
+  circuitLineColor,
+}: {
+  isActive: boolean;
+  circuitLineColor: string;
+}) => {
+  const styles = {
+    opacity: {
+      off: 0.5,
+      on: [0.5, 1, 0.5],
+    },
+    fill: {
+      off: "#ffffff30",
+      on: "url(#paint0_linear_509_3705)",
+    },
+  };
+
   return (
     <svg width="74" height="94" viewBox="0 0 74 94" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
+      <motion.path
+        initial={{ opacity: styles.opacity.off, fill: styles.fill.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          fill: isActive ? styles.fill.on : styles.fill.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 3 : 0.15,
+          ease: "easeInOut",
+        }}
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M36.8932 4.63604C38.581 2.94821 40.8702 2 43.2571 2H72.4033V0H43.2571C40.3398 0 37.5419 1.15893 35.479 3.22183L3.22183 35.479C1.15893 37.5419 0 40.3398 0 43.2571V93.7441H2V43.2571C2 40.8702 2.94821 38.581 4.63604 36.8932L36.8932 4.63604ZM46.6701 9.31836C44.2831 9.31836 41.9939 10.2666 40.3061 11.9544L11.514 40.7465C9.82614 42.4344 8.87793 44.7236 8.87793 47.1105V93.7441H6.87793V47.1105C6.87793 44.1931 8.03685 41.3952 10.0998 39.3323L38.8919 10.5402C40.9548 8.47729 43.7527 7.31836 46.6701 7.31836H72.4033V9.31836H46.6701ZM43.6815 18.8802C45.3693 17.1924 47.6585 16.2441 50.0455 16.2441H72.4033V14.2441H50.0455C47.1281 14.2441 44.3302 15.4031 42.2673 17.466L16.6251 43.1081C14.5622 45.171 13.4033 47.9689 13.4033 50.8863V93.7441H15.4033V50.8863C15.4033 48.4993 16.3515 46.2101 18.0394 44.5223L43.6815 18.8802ZM47.6537 26.4416C49.1727 24.9226 51.233 24.0692 53.3813 24.0692H73.5033V22.2692H53.3813C50.7556 22.2692 48.2375 23.3122 46.3809 25.1688L23.303 48.2468C21.4464 50.1034 20.4033 52.6215 20.4033 55.2471V93.8192H22.2033V55.2471C22.2033 53.0989 23.0567 51.0386 24.5758 49.5195L47.6537 26.4416Z"
-        fill="url(#paint0_linear_509_3705)"
+        d="M36.8932 4.63604C38.581 2.94821 40.8702 2 43.2571 2H72.4033V0H43.2571C40.3398 0 37.5419 1.15893 35.479 3.22183L3.22183 35.479C1.15893 37.5419 0 40.3398 0 43.2571V93.7441H2V43.2571C2 40.8702 2.94821 38.581 4.63604 36.8932L36.8932 4.63604Z"
+      />
+      <motion.path
+        initial={{ opacity: styles.opacity.off, fill: styles.fill.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          fill: isActive ? styles.fill.on : styles.fill.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 2 : 0.15,
+          ease: "easeInOut",
+        }}
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M46.6701 9.31836C44.2831 9.31836 41.9939 10.2666 40.3061 11.9544L11.514 40.7465C9.82614 42.4344 8.87793 44.7236 8.87793 47.1105V93.7441H6.87793V47.1105C6.87793 44.1931 8.03685 41.3952 10.0998 39.3323L38.8919 10.5402C40.9548 8.47729 43.7527 7.31836 46.6701 7.31836H72.4033V9.31836H46.6701Z"
+      />
+      <motion.path
+        initial={{ opacity: styles.opacity.off, fill: styles.fill.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          fill: isActive ? styles.fill.on : styles.fill.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 1.5 : 0.15,
+          ease: "easeInOut",
+        }}
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M43.6815 18.8802C45.3693 17.1924 47.6585 16.2441 50.0455 16.2441H72.4033V14.2441H50.0455C47.1281 14.2441 44.3302 15.4031 42.2673 17.466L16.6251 43.1081C14.5622 45.171 13.4033 47.9689 13.4033 50.8863V93.7441H15.4033V50.8863C15.4033 48.4993 16.3515 46.2101 18.0394 44.5223L43.6815 18.8802Z"
+      />
+      <motion.path
+        initial={{ opacity: styles.opacity.off, fill: styles.fill.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          fill: isActive ? styles.fill.on : styles.fill.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 1.3 : 0.15,
+          ease: "easeInOut",
+        }}
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M47.6537 26.4416C49.1727 24.9226 51.233 24.0692 53.3813 24.0692H73.5033V22.2692H53.3813C50.7556 22.2692 48.2375 23.3122 46.3809 25.1688L23.303 48.2468C21.4464 50.1034 20.4033 52.6215 20.4033 55.2471V93.8192H22.2033V55.2471C22.2033 53.0989 23.0567 51.0386 24.5758 49.5195L47.6537 26.4416Z"
       />
       <defs>
         <linearGradient
@@ -460,9 +624,9 @@ const BottomLeftCircuitLines = () => {
           y2="93.8192"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#20473A" />
-          <stop offset="0.262213" stopColor="#181818" />
-          <stop offset="1" stopColor="#18372D" />
+          <stop stopColor={circuitLineColor} />
+          <stop offset="0.262213" stopColor="#21113e" />
+          <stop offset="1" stopColor={circuitLineColor} />
         </linearGradient>
       </defs>
     </svg>
@@ -488,22 +652,27 @@ const MiddleChip = ({ data, cellIsActive }: { data: SequenceDataProps; cellIsAct
           ))}
         </div>
         {/* bg gradient */}
-        <motion.div
-          initial={{
-            background: "#00000090",
-          }}
-          animate={{
-            background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
-          }}
-          transition={{
-            duration: 1,
-            delay: 0.25,
-          }}
-          className="z-0 absolute inset-0 backdrop-blur-sm"
-          style={{
-            background: data.colors.cellBgGradient,
-          }}
-        ></motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cellIsActive ? "active" : "inactive"}
+            initial={{
+              background: "#00000090",
+              opacity: 0,
+            }}
+            animate={{
+              background: cellIsActive ? data.colors.cellBgGradient : "#00000090",
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.5,
+              delay: 0.15,
+            }}
+            className="z-0 absolute inset-0 backdrop-blur-sm"
+          ></motion.div>
+        </AnimatePresence>
       </div>
       {/* text box */}
       <div className="absolute bottom-[-41%] left-1/2 -translate-x-1/2">
@@ -513,32 +682,109 @@ const MiddleChip = ({ data, cellIsActive }: { data: SequenceDataProps; cellIsAct
   );
 };
 
-const MiddleCircuitLines = () => {
+const MiddleCircuitLines = ({
+  isActive,
+  circuitLineColor,
+}: {
+  isActive: boolean;
+  circuitLineColor: string;
+}) => {
+  const styles = {
+    opacity: {
+      off: 0.5,
+      on: [0.5, 1, 0.5],
+    },
+    stroke1: {
+      off: "#ffffff30",
+      on: "url(#paint0_linear_510_3712)",
+    },
+    stroke2: {
+      off: "#ffffff30",
+      on: "url(#paint1_linear_510_3712)",
+    },
+    stroke3: {
+      off: "#ffffff30",
+      on: "url(#paint2_linear_510_3712)",
+    },
+    stroke4: {
+      off: "#ffffff30",
+      on: "url(#paint3_linear_510_3712)",
+    },
+    stroke5: {
+      off: "#ffffff30",
+      on: "url(#paint4_linear_510_3712)",
+    },
+  };
   return (
     <svg width="75" height="78" viewBox="0 0 75 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke1.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke1.on : styles.stroke1.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 1.5 : 0.15,
+          ease: "easeInOut",
+        }}
         d="M75 44H62.1421C59.49 44 56.9464 45.0536 55.0711 46.9289L39.9289 62.0711C38.0536 63.9464 35.51 65 32.8579 65H0"
-        stroke="url(#paint0_linear_510_3712)"
         strokeWidth="2"
       />
-      <path
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke2.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke2.on : styles.stroke2.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 2 : 0.15,
+          ease: "easeInOut",
+        }}
         d="M75 28H62.1421C59.49 28 56.9464 26.9464 55.0711 25.0711L39.9289 9.92893C38.0536 8.05357 35.51 7 32.8579 7H0"
-        stroke="url(#paint1_linear_510_3712)"
         strokeWidth="2"
       />
-      <path
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke3.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke3.on : styles.stroke3.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 3 : 0.15,
+          ease: "easeInOut",
+        }}
         d="M75 50H66.6421C63.99 50 61.4464 51.0536 59.5711 52.9289L44.4289 68.0711C42.5536 69.9464 40.01 71 37.3579 71H0"
-        stroke="url(#paint2_linear_510_3712)"
         strokeWidth="2"
       />
-      <path
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke4.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke4.on : styles.stroke4.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 1.25 : 0.15,
+          ease: "easeInOut",
+        }}
         d="M75 22H66.6421C63.99 22 61.4464 20.9464 59.5711 19.0711L44.4289 3.92893C42.5536 2.05357 40.01 1 37.3579 1H0"
-        stroke="url(#paint3_linear_510_3712)"
         strokeWidth="2"
       />
-      <path
+      <motion.path
+        initial={{ opacity: styles.opacity.off, stroke: styles.stroke5.off }}
+        animate={{
+          opacity: isActive ? styles.opacity.on : styles.opacity.off,
+          stroke: isActive ? styles.stroke5.on : styles.stroke5.off,
+        }}
+        transition={{
+          repeat: isActive ? Infinity : 0,
+          duration: isActive ? 2.75 : 0.15,
+          ease: "easeInOut",
+        }}
         d="M75 56H71.1421C68.49 56 65.9464 57.0536 64.0711 58.9289L48.9289 74.0711C47.0536 75.9464 44.51 77 41.8579 77H0"
-        stroke="url(#paint4_linear_510_3712)"
         strokeWidth="2"
       />
       <defs>
@@ -550,9 +796,9 @@ const MiddleCircuitLines = () => {
           y2="54.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#101010" />
-          <stop offset="0.407213" stopColor="#5819F0" />
-          <stop offset="1" stopColor="#101010" />
+          <stop stopColor="#21113e" />
+          <stop offset="0.407213" stopColor={circuitLineColor} />
+          <stop offset="1" stopColor="#21113e" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_510_3712"
@@ -562,9 +808,9 @@ const MiddleCircuitLines = () => {
           y2="17.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#331679" />
-          <stop offset="0.242213" stopColor="#15111F" />
-          <stop offset="1" stopColor="#331679" />
+          <stop stopColor="#21113e" />
+          <stop offset="0.242213" stopColor="#21113e" />
+          <stop offset="1" stopColor={circuitLineColor} />
         </linearGradient>
         <linearGradient
           id="paint2_linear_510_3712"
@@ -574,8 +820,8 @@ const MiddleCircuitLines = () => {
           y2="60.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#101010" />
-          <stop offset="1" stopColor="#331679" />
+          <stop stopColor="#21113e" />
+          <stop offset="1" stopColor={circuitLineColor} />
         </linearGradient>
         <linearGradient
           id="paint3_linear_510_3712"
@@ -585,8 +831,8 @@ const MiddleCircuitLines = () => {
           y2="11.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#101010" />
-          <stop offset="1" stopColor="#4217AA" />
+          <stop stopColor="#21113e" />
+          <stop offset="1" stopColor={circuitLineColor} />
         </linearGradient>
         <linearGradient
           id="paint4_linear_510_3712"
@@ -596,8 +842,8 @@ const MiddleCircuitLines = () => {
           y2="66.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#252327" />
-          <stop offset="1" stopColor="#331679" />
+          <stop stopColor="#21113e" />
+          <stop offset="1" stopColor={circuitLineColor} />
         </linearGradient>
       </defs>
     </svg>
@@ -719,6 +965,10 @@ const SequenceFeatureTextCarousel = ({
       on: 1,
       off: 0,
     },
+    y: {
+      on: 0,
+      off: 10,
+    },
   };
 
   const transition = {
@@ -727,26 +977,36 @@ const SequenceFeatureTextCarousel = ({
 
   return (
     <div className="inline mx-auto relative z-20">
-      <motion.div
-        initial={{
-          opacity: animationStyles.opacity.off,
-          border: `2px solid ${animationStyles.borderColor.off}`,
-          background: animationStyles.bgColor.off,
-        }}
-        animate={{
-          opacity: cellIsActive ? animationStyles.opacity.on : animationStyles.opacity.off,
-          border: cellIsActive
-            ? `2px solid ${animationStyles.borderColor.on}`
-            : `2px solid ${animationStyles.borderColor.off}`,
-          background: cellIsActive ? animationStyles.bgColor.on : animationStyles.bgColor.off,
-        }}
-        transition={transition}
-        className="rounded-[4px] px-2 py-[3px] inline-grid place-items-center"
-      >
-        <span className="text-white-50 text-[10px] md:text-xs font-medium whitespace-nowrap">
-          {data.title}
-        </span>
-      </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          layout
+          key={data.title}
+          initial={{
+            opacity: animationStyles.opacity.off,
+            border: `1px solid ${animationStyles.borderColor.off}`,
+            background: animationStyles.bgColor.off,
+            y: animationStyles.y.off,
+          }}
+          animate={{
+            opacity: cellIsActive ? animationStyles.opacity.on : animationStyles.opacity.off,
+            border: cellIsActive
+              ? `1px solid ${animationStyles.borderColor.on}`
+              : `1px solid ${animationStyles.borderColor.off}`,
+            background: cellIsActive ? animationStyles.bgColor.on : animationStyles.bgColor.off,
+            y: cellIsActive ? animationStyles.y.on : animationStyles.y.off,
+          }}
+          exit={{
+            opacity: 0,
+            y: 5,
+          }}
+          transition={transition}
+          className="rounded-[4px] px-2 py-[3px] inline-grid place-items-center"
+        >
+          <span className="text-white-50 text-[10px] md:text-xs font-medium whitespace-nowrap">
+            {data.title}
+          </span>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };
@@ -776,7 +1036,7 @@ const useSequenceClock = (initialDelay: number, dataArray: SequenceDataProps[]) 
         }
 
         // Schedule next toggle based on current state
-        const nextDelay = isActive ? 4000 : 2500; // Active duration | Inactive duration
+        const nextDelay = isActive ? 4000 : 1500; // Active duration | Inactive duration
         timeoutId = setTimeout(toggleClock, nextDelay);
       };
 
@@ -809,34 +1069,38 @@ const AnimationWrapper = () => {
     power: {
       borderColor: "#1b2d94b2",
       bgColor: "#1B2E94",
-      gradientColor: "linear-gradient(145deg, #667DF6 12.71%, #2C44C1 80.61%)",
+      gradientColor: "linear-gradient(145deg, #667DF6 12.5%, #2C44C1 80%)",
       icon: WalletIcon,
       cellBgGradient:
-        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(74, 97, 220, 0.30) 0%, rgba(74, 97, 220, 0.00) 100%)",
+        "radial-gradient(85% 50% at 50% 50%, rgba(74, 97, 220, 0.30) 0%, rgba(74, 97, 220, 0.00) 100%)",
+      circuitLineColor: "#2C44C1",
     },
     onboard: {
       borderColor: "#3b1796dc",
       bgColor: "#3C1796",
-      gradientColor: "linear-gradient(145deg, #9C6EFF 12.71%, #6635FF 80.61%)",
+      gradientColor: "linear-gradient(145deg, #9C6EFF 12.5%, #6635FF 80%)",
       icon: TransactionIcon,
       cellBgGradient:
-        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(149, 106, 253, 0.30) 0%, rgba(141, 94, 255, 0.00) 100%)",
+        "radial-gradient(85% 50% at 50% 50%, rgba(149, 106, 253, 0.40) 0%, rgba(141, 94, 255, 0.00) 100%)",
+      circuitLineColor: "#4920b3",
     },
     analytics: {
       borderColor: "#1e6381bd",
       bgColor: "#0B597B",
-      gradientColor: "linear-gradient(145deg, #31C7F0 12.71%, #1179A6 80.61%)",
+      gradientColor: "linear-gradient(145deg, #31C7F0 12.5%, #1179A6 80%)",
       icon: CollectionIcon,
       cellBgGradient:
-        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(36, 144, 190, 0.50) 0%, rgba(36, 144, 190, 0.00) 100%)",
+        "radial-gradient(85% 50% at 50% 50%, rgba(36, 144, 190, 0.50) 0%, rgba(36, 144, 190, 0.00) 100%)",
+      circuitLineColor: "#288fbb",
     },
     monetize: {
       borderColor: "#215846b5",
       bgColor: "#20473A",
-      gradientColor: "linear-gradient(145deg, #7BC7AD 12.71%, #3C6154 80.61%)",
+      gradientColor: "linear-gradient(145deg, #7BC7AD 12.5%, #3C6154 80%)",
       icon: WalletIcon,
       cellBgGradient:
-        "radial-gradient(87.49% 53.42% at 50% 50%, rgba(123, 199, 173, 0.30) 0%, rgba(123, 199, 173, 0.00) 100%)",
+        "radial-gradient(85% 50% at 50% 50%, rgba(123, 199, 173, 0.30) 0%, rgba(123, 199, 173, 0.00) 100%)",
+      circuitLineColor: "#238664",
     },
   };
 
@@ -913,8 +1177,8 @@ const AnimationWrapper = () => {
   const sequenceData3 = sequenceData.slice(8); // Remaining items
 
   // Use the enhanced hook
-  const clock1 = useSequenceClock(2000, sequenceData1);
-  const clock2 = useSequenceClock(2500, sequenceData2);
+  const clock1 = useSequenceClock(0, sequenceData1);
+  const clock2 = useSequenceClock(1500, sequenceData2);
   const clock3 = useSequenceClock(3000, sequenceData3);
 
   return (
@@ -926,7 +1190,10 @@ const AnimationWrapper = () => {
           <TopLeftChip data={clock1.currentData} cellIsActive={clock1.isActive} />
         </div>
         <div className="z-0 absolute top-[38%] -right-20">
-          <TopLeftCircuitLines />
+          <TopLeftCircuitLines
+            isActive={clock1.isActive}
+            circuitLineColor={clock1.currentData.colors.circuitLineColor}
+          />
         </div>
       </div>
       {/* middle */}
@@ -935,7 +1202,10 @@ const AnimationWrapper = () => {
           <MiddleChip data={clock2.currentData} cellIsActive={clock2.isActive} />
         </div>
         <div className="z-0 absolute top-[10%] left-[-100%]">
-          <MiddleCircuitLines />
+          <MiddleCircuitLines
+            isActive={clock2.isActive}
+            circuitLineColor={clock2.currentData.colors.circuitLineColor}
+          />
         </div>
       </div>
       {/* bottom left */}
@@ -944,7 +1214,10 @@ const AnimationWrapper = () => {
           <BottomLeftChip data={clock3.currentData} cellIsActive={clock3.isActive} />
         </div>
         <div className="z-0 absolute top-[-100%] -right-4">
-          <BottomLeftCircuitLines />
+          <BottomLeftCircuitLines
+            isActive={clock3.isActive}
+            circuitLineColor={clock3.currentData.colors.circuitLineColor}
+          />
         </div>
       </div>
     </div>
