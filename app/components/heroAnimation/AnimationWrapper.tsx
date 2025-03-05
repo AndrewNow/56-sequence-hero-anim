@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import { animate, timeline } from "motion";
 import { WalletIcon, TransactionIcon, CollectionIcon } from "./icons";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -1321,6 +1320,7 @@ const AnimationWrapper = () => {
     <div className="size-full">
       <MainChipSequence />
       {/* top left */}
+      {/* NOTE: we position the "Chips" in the parent instead of within their components (easier to manage) */}
       <div className="inline-flex absolute top-[16%] md:top-[18%] left-[5%] md:left-[13%]">
         <div className="flex flex-col gap-2 items-center">
           <TopLeftChip data={clock1.currentData} cellIsActive={clock1.isActive} />
